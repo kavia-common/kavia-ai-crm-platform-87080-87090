@@ -1,82 +1,39 @@
-# Lightweight React Template for KAVIA
+# Kavia CRM Frontend (Ocean Professional)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+Modern, responsive React frontend for Kavia AI CRM. Implements the Ocean Professional theme (blue & amber accents), minimalist design, subtle shadows, rounded corners, and smooth transitions.
 
 ## Features
-
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- App shell with sidebar navigation and top bar
+- Dashboard with stat cards and AI forecast overview
+- Entity pages: Contacts, Accounts, Deals
+- Pipeline board with stages and quick move actions
+- Activities logging with modal form
+- AI Insights: lead scoring, forecast, win probability
+- Responsive grid and accessible components
+- Environment-driven API base URL
 
 ## Getting Started
+1) Install
+   npm install
 
-In the project directory, you can run:
+2) Environment
+   Copy .env.example to .env and set:
+   REACT_APP_BACKEND_URL=http://localhost:8000
 
-### `npm start`
+3) Run
+   npm start
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Structure
+- src/styles.css: Global styles per Ocean Professional theme
+- src/theme.js: Theme tokens and CSS variable application
+- src/services/api.js: API client (contacts, accounts, deals, pipeline, activities, AI)
+- src/components/: Layout, Sidebar, Topbar, Card, Tabs, Modal, Badge
+- src/pages/: Dashboard, Contacts, Accounts, Deals, Pipeline, Activities, AIInsights
+- src/AppRouter.js: Routes and theme initialization
+- src/App.js: Entry component rendering AppRouter
 
-### `npm test`
+## Notes
+- No UI frameworks; purely React + CSS for minimal bundle.
+- Backend URL is not hardcoded; it must be provided via .env.
+- Routes use react-router-dom v6.
 
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
-
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
-
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
