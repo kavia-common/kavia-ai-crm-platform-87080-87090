@@ -1,48 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import './theme/ocean.css';
+import AppLayout from './layouts/AppLayout';
+import Dashboard from './pages/Dashboard';
+import Contacts from './pages/Contacts';
+import Accounts from './pages/Accounts';
+import Deals from './pages/Deals';
+import Activities from './pages/Activities';
+import Pipeline from './pages/Pipeline';
+import AIInsights from './pages/AIInsights';
 
 // PUBLIC_INTERFACE
 function App() {
-  const [theme, setTheme] = useState('light');
-
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
+  /** This is a public function. Main application entry with routing and layout. */
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <AppLayout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/accounts" element={<Accounts />} />
+          <Route path="/deals" element={<Deals />} />
+          <Route path="/activities" element={<Activities />} />
+          <Route path="/pipeline" element={<Pipeline />} />
+          <Route path="/ai" element={<AIInsights />} />
+        </Routes>
+      </AppLayout>
+    </BrowserRouter>
   );
 }
 
