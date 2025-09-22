@@ -33,6 +33,11 @@ const Sidebar = () => {
       </div>
 
       <div className="nav-section">
+        <div className="nav-title">Team</div>
+        <NavLink to="/team" className={linkClass}>👥 Sales Team</NavLink>
+      </div>
+
+      <div className="nav-section">
         <div className="nav-title">Admin</div>
         <NavLink to="/settings" className={linkClass}>⚙️ Settings</NavLink>
       </div>

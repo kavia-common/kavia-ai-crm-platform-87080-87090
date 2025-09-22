@@ -9,6 +9,7 @@ import Pipeline from './pages/Pipeline';
 import Activities from './pages/Activities';
 import AIInsights from './pages/AIInsights';
 import Settings from './pages/Settings';
+import SalesTeam from './pages/SalesTeam';
 
 /**
  * PUBLIC_INTERFACE
@@ -37,6 +38,7 @@ function App() {
           <Route path="/activities" element={<Activities />} />
           <Route path="/ai" element={<AIInsights />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/team" element={<SalesTeam />} />
           <Route path="*" element={<div style={{padding:20}}>Not Found</div>} />
         </Routes>
       </Layout>

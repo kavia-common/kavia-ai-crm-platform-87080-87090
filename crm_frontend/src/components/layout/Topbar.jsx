@@ -18,6 +18,7 @@ const Topbar = ({ onToggleSidebar }) => {
     if (pathname.startsWith('/activities')) return 'Activities';
     if (pathname.startsWith('/ai')) return 'AI Insights';
     if (pathname.startsWith('/settings')) return 'Settings';
+    if (pathname.startsWith('/team')) return 'Sales Team';
     return 'Kavia CRM';
   })();
 
