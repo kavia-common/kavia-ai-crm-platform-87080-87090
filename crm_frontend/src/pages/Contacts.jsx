@@ -12,9 +12,14 @@ const Contacts = () => {
     { key: 'customers', label: 'Customers' },
   ];
 
+  // Updated mock: contacts at Tata Elxsi, ioet, GCS Tech, DigitalT3, MetaZ digital
+  // Owners map to current team members seen across Pipeline/SalesTeam (Alex, Jamie, Priya, Sam, Lee, Morgan, Tariq).
   const mock = [
-    { id: 1, name: 'Jane Cooper', email: 'jane@acme.com', status: 'Lead' },
-    { id: 2, name: 'Wade Warren', email: 'wade@globex.com', status: 'Customer' },
+    { id: 1, name: 'Ravi Kumar', email: 'ravi.kumar@tataelxsi.com', status: 'Lead', company: 'Tata Elxsi', owner: 'Alex' },
+    { id: 2, name: 'María Pérez', email: 'maria.perez@ioet.com', status: 'Customer', company: 'ioet', owner: 'Jamie' },
+    { id: 3, name: 'George Smith', email: 'g.smith@gcstech.com', status: 'Lead', company: 'GCS Tech', owner: 'Priya' },
+    { id: 4, name: 'Dinesh Sharma', email: 'dinesh@digitalt3.com', status: 'Lead', company: 'DigitalT3', owner: 'Jamie' },
+    { id: 5, name: 'Zara Ali', email: 'z.ali@metaz.digital', status: 'Lead', company: 'MetaZ digital', owner: 'Priya' },
   ];
 
   return (
@@ -25,7 +30,7 @@ const Contacts = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>Name</th><th>Email</th><th>Status</th><th></th>
+                <th>Name</th><th>Email</th><th>Company</th><th>Owner</th><th>Status</th><th></th>
               </tr>
             </thead>
             <tbody>
@@ -33,6 +38,8 @@ const Contacts = () => {
                 <tr key={c.id}>
                   <td>{c.name}</td>
                   <td>{c.email}</td>
+                  <td>{c.company}</td>
+                  <td>{c.owner}</td>
                   <td><span className="badge success">{c.status}</span></td>
                   <td><button className="button">View</button></td>
                 </tr>

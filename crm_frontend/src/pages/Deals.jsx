@@ -20,14 +20,16 @@ const STAGES = [
 const Deals = () => {
   const [open, setOpen] = useState(false);
   // Expanded mock to reflect multiple stages and include provided companies
+  // Updated with owners aligned to Pipeline assignments
   const mock = [
-    { id: 501, name: 'Tata Elxsi - POC Proposal', stage: 'poc proposal', amount: 88000, closeDate: '2025-11-01' },
-    { id: 301, name: 'GCS Tech - Discovery', stage: 'discovery call', amount: 54000, closeDate: '2025-10-12' },
-    { id: 201, name: 'ioet - Initial Fit', stage: 'qualification', amount: 32000, closeDate: '2025-10-05' },
-    { id: 602, name: 'DigitalT3 - Pilot Implementation', stage: 'poc execution', amount: 67000, closeDate: '2025-11-15' },
-    { id: 701, name: 'MetaZ digital - Evaluation', stage: 'evaluation and feedback', amount: 74000, closeDate: '2025-11-20' },
-    { id: 901, name: 'Acme Inc. - Q3 Expansion', stage: 'closed won', amount: 54000, closeDate: '2025-09-10' },
-    { id: 402, name: 'Umbrella Corp - Platform Walkthrough', stage: 'demo', amount: 38000, closeDate: '2025-10-01' },
+    { id: 501, name: 'Tata Elxsi - POC Proposal', stage: 'poc proposal', amount: 88000, closeDate: '2025-11-01', owner: 'Alex' },
+    { id: 301, name: 'GCS Tech - Discovery', stage: 'discovery call', amount: 54000, closeDate: '2025-10-12', owner: 'Jamie' },
+    { id: 201, name: 'ioet - Initial Fit', stage: 'qualification', amount: 32000, closeDate: '2025-10-05', owner: 'Alex' },
+    { id: 602, name: 'DigitalT3 - Pilot Implementation', stage: 'poc execution', amount: 67000, closeDate: '2025-11-15', owner: 'Jamie' },
+    { id: 701, name: 'MetaZ digital - Evaluation', stage: 'evaluation and feedback', amount: 74000, closeDate: '2025-11-20', owner: 'Priya' },
+    // keep a couple of other deals for variety
+    { id: 901, name: 'Acme Inc. - Q3 Expansion', stage: 'closed won', amount: 54000, closeDate: '2025-09-10', owner: 'Morgan' },
+    { id: 402, name: 'Umbrella Corp - Platform Walkthrough', stage: 'demo', amount: 38000, closeDate: '2025-10-01', owner: 'Tariq' },
   ];
 
   return (

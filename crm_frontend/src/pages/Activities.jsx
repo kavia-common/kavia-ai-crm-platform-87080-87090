@@ -3,9 +3,13 @@ import Card from '../components/ui/Card';
 import { formatDate } from '../utils/format';
 
 const Activities = () => {
+  // Updated activities aligned to the new companies and team members
   const mock = [
-    { id: 1, type: 'Call', subject: 'Follow up with Acme', when: '2025-09-15', owner: 'Alex' },
-    { id: 2, type: 'Email', subject: 'Send proposal to Globex', when: '2025-09-16', owner: 'Jamie' },
+    { id: 1, type: 'Call',    subject: 'Follow up with Tata Elxsi (POC proposal clarifications)', when: '2025-09-15', owner: 'Alex' },
+    { id: 2, type: 'Email',   subject: 'Send qualification summary to ioet',                        when: '2025-09-16', owner: 'Alex' },
+    { id: 3, type: 'Meeting', subject: 'Discovery session with GCS Tech',                           when: '2025-09-18', owner: 'Jamie' },
+    { id: 4, type: 'Email',   subject: 'Pilot scope shared with DigitalT3',                         when: '2025-09-19', owner: 'Jamie' },
+    { id: 5, type: 'Call',    subject: 'Evaluation feedback call with MetaZ digital',               when: '2025-09-20', owner: 'Priya' },
   ];
 
   return (
