@@ -43,6 +43,36 @@ The services call the following endpoints:
 ID handling:
 - UI tolerates either `id` or `_id` fields when rendering and deleting.
 
+### Pipeline-specific assumptions and normalization
+
+- Stage normalization: The frontend normalizes backend stage strings to lower-case words with spaces and replaces underscores/dashes with spaces. It also converts `&` to `and`. Example mappings:
+  - "Prospecting" / "prospecting" / "PROSPECTING" -> "prospecting"
+  - "discovery_call" -> "discovery call"
+  - "negotiation & contracting" -> "negotiation and contracting"
+- Canonical pipeline columns (in order):
+  1. prospecting
+  2. qualification
+  3. discovery call
+  4. demo
+  5. poc proposal
+  6. poc execution
+  7. evaluation and feedback
+  8. negotiation and contracting
+  9. closed won
+  10. closed lost
+- Move endpoint: Default is `PUT /deals/:id/move` with body `{ "stage": "<normalized stage>" }`. If your backend differs:
+  - PATCH usage: update DealsService.move to `patch('/deals/${id}', { stage })`
+  - Alternate path: update DealsService.move to `put('/pipeline/deals/${id}/stage', { stage })`
+
+### Response shape tolerance
+
+- Lists can be either:
+  - An array directly: `[...]`
+  - An object wrapper with any of these array fields: `{ items: [...] }`, `{ results: [...] }`, `{ data: [...] }`
+- The SWR hook `useAPI` now normalizes these automatically. Pages typically use:
+  - `const { data } = useAPI('/deals')`
+  - And then: `const list = Array.isArray(data) ? data : (data?.items || data?.results || data?.data || [])`
+
 ## Backend CORS configuration
 
 If the frontend runs at http://localhost:3000 and backend at http://localhost:8000:
@@ -66,20 +96,11 @@ app.add_middleware(
 )
 ```
 
-## Common mismatches and how to adjust
-
-- API base path: If your backend serves at `/` instead of `/api`, set `REACT_APP_API_BASE=http://localhost:8000`.
-- Move endpoint: If backend uses PATCH or a different path (e.g., `/deals/:id` with `{ stage }`), update `DealsService.move` accordingly:
-  - PATCH example: `return patch(\`/deals/${id}\`, { stage });`
-  - Alternative path example: `return put(\`/pipeline/deals/${id}/stage\`, { stage });`
-- Field names:
-  - Contacts may expose `name` instead of `firstName`/`lastName`. The UI sends both `name` and separate fields when creating to maximize compatibility.
-  - IDs: UI checks both `id` and `_id` keys for rendering and deletion.
-
 ## Error handling
 
-- Network/CORS issues show as "Network error calling API" with status 0.
-- Server errors (non-2xx) throw with `.status` and `.payload` containing parsed JSON if available, otherwise text.
+All requests use a shared apiClient with:
+- Network errors thrown as `Error('Network error calling API: ...')` with `status=0`.
+- Non-2xx responses throw an Error with `.status` and `.payload` containing parsed JSON when possible (otherwise response text).
 
 ## Verification checklist
 
@@ -88,7 +109,8 @@ app.add_middleware(
   - Create works (POST)
   - Delete works (DELETE)
 - Pipeline:
-  - Deals appear grouped by stage
+  - Deals appear grouped by stage in columns above
+  - Stage labels from backend are normalized (case, underscores, ampersand) and never cause deals to “disappear”
   - Changing the stage triggers a request to move and refreshes the list
 - Activities:
   - Listing and creating logs works

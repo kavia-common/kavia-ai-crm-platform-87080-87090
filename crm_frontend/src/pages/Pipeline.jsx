@@ -19,18 +19,50 @@ const stages = [
 ];
 
 /**
+ * Normalize a backend stage string to match our canonical column keys.
+ * - Lowercase
+ * - Replace underscores/dashes with space
+ * - Collapse double spaces
+ * - Map known variants (e.g., "negotiation & contracting" -> "negotiation and contracting")
+ */
+function normalizeStageName(value) {
+  if (!value) return '';
+  let s = String(value).trim().toLowerCase();
+  s = s.replace(/[_-]+/g, ' ');
+  s = s.replace(/\s+/g, ' ');
+  // common synonyms/variants
+  s = s.replace(/\b&\b/g, 'and');
+  s = s.replace(/\beval(uation)?\b/g, 'evaluation');
+  s = s.replace(/\bfeedback\b/g, 'feedback');
+  // return as-is; grouping will ignore unknowns
+  return s;
+}
+
+/**
  * Pipeline now fetches deals from backend /deals but keeps same UI structure.
- * Assumes each deal has fields: id, name, amount, stage, owner.
+ * Assumes each deal has fields: id (or _id), name, amount, stage, owner.
+ * Tolerates backend response shapes: array or { items/results/data }.
  */
 const Pipeline = () => {
   const { data, error, isLoading, mutate } = useAPI('/deals');
-  const deals = Array.isArray(data) ? data : (data?.items || []);
+  const dealsList = Array.isArray(data) ? data : (data?.items || data?.results || data?.data || []);
+  // Normalize stage for each deal without mutating original object
+  const deals = useMemo(
+    () =>
+      dealsList.map((d) => ({
+        ...d,
+        stage: normalizeStageName(d.stage),
+      })),
+    [dealsList]
+  );
 
   // Group by stage locally for now
   const byStage = useMemo(() => {
     const base = stages.reduce((acc, s) => ({ ...acc, [s]: [] }), {});
-    deals.forEach(d => {
-      if (base[d.stage]) base[d.stage].push(d);
+    deals.forEach((d) => {
+      const st = d.stage;
+      if (base[st]) base[st].push(d);
+      // else unknown stage goes to no column; we could show an "Other" column if needed
     });
     return base;
   }, [deals]);
