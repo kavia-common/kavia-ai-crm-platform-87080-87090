@@ -206,7 +206,7 @@ const Dashboard = () => {
           title="Account Breakdown"
           subtitle={`${totalOpenDeals} open deals • ${formatCurrency(pipelineTotal)} total pipeline`}
         >
-          <table className="table">
+          <table className="table" role="table" aria-label="Account breakdown table">
             <thead>
               <tr>
                 <th>Account</th>
@@ -229,7 +229,7 @@ const Dashboard = () => {
         </Card>
 
         <Card title="Recent Deals" subtitle="Latest opportunities in motion">
-          <table className="table">
+          <table className="table" role="table" aria-label="Recent deals table">
             <thead>
               <tr>
                 <th>Deal</th>

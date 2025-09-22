@@ -35,7 +35,7 @@ const Accounts = () => {
         title="Accounts"
         right={<button className="button primary" onClick={() => setOpen(true)}>+ New Account</button>}
       >
-        <table className="table">
+        <table className="table" role="table" aria-label="Accounts table">
           <thead>
             <tr>
               <th>Name</th><th>Domain</th><th>Owner</th><th></th>
@@ -48,8 +48,8 @@ const Accounts = () => {
                 <td>{a.domain || '-'}</td>
                 <td>{a.owner || '-'}</td>
                 <td style={{ display: 'flex', gap: 8 }}>
-                  <button className="button">Open</button>
-                  <button className="button" onClick={() => onDelete(a.id || a._id)}>Delete</button>
+                  <button className="button" title="Open account">Open</button>
+                  <button className="button" title="Delete account" onClick={() => onDelete(a.id || a._id)}>Delete</button>
                 </td>
               </tr>
             ))}

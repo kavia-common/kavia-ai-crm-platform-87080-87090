@@ -25,13 +25,24 @@ const Topbar = ({ onToggleSidebar }) => {
   return (
     <>
       <div style={{display:'flex', alignItems:'center', gap:12}}>
-        <button className="button" onClick={onToggleSidebar} aria-label="Toggle sidebar">☰</button>
+        <button className="button" onClick={onToggleSidebar} aria-label="Toggle sidebar" title="Toggle sidebar (S)">
+          ☰
+        </button>
         <h3 style={{margin:0}}>{title}</h3>
       </div>
-      <div style={{display:'flex', alignItems:'center', gap:10}}>
-        <input className="input" placeholder="Search contacts, accounts, deals..." style={{minWidth: 280}} />
-        <button className="button" onClick={() => nav('/contacts')}>+ Contact</button>
-        <button className="button primary" onClick={() => nav('/deals')}>+ Deal</button>
+      <div style={{display:'flex', alignItems:'center', gap:10, flexWrap:'wrap'}}>
+        <input
+          className="input"
+          placeholder="Search contacts, accounts, deals..."
+          aria-label="Search"
+          style={{minWidth: 240}}
+        />
+        <button className="button" onClick={() => nav('/contacts')} aria-label="Add contact">
+          + Contact
+        </button>
+        <button className="button primary" onClick={() => nav('/deals')} aria-label="Add deal">
+          + Deal
+        </button>
       </div>
     </>
   );

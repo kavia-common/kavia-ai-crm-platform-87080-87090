@@ -68,6 +68,8 @@ const Pipeline = () => {
                   <select
                     className="select"
                     value={d.stage}
+                    aria-label="Move deal to stage"
+                    title="Move deal to stage"
                     onChange={(e) => onMove(d.id || d._id, e.target.value)}
                   >
                     {stages.map(st => (

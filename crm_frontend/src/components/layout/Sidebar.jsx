@@ -30,9 +30,11 @@ const Sidebar = () => {
       onClick={() => toggle(id)}
       aria-expanded={!collapsed[id]}
       aria-controls={`group-${id}`}
+      role="button"
+      title={`${title} navigation`}
     >
       <span className="nav-group-title">{title}</span>
-      <span className={`chevron ${collapsed[id] ? 'collapsed' : ''}`}>▾</span>
+      <span className={`chevron ${collapsed[id] ? 'collapsed' : ''}`} aria-hidden="true">▾</span>
     </button>
   );
 

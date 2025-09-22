@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
         <Topbar onToggleSidebar={() => setSidebarOpen((v) => !v)} />
       </header>
       <main className="main">
-        {children}
+        <div className="container">{children}</div>
       </main>
     </div>
   );

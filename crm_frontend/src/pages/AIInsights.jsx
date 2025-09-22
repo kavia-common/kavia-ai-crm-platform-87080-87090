@@ -196,7 +196,7 @@ const AIInsights = () => {
           </div>
         }
       >
-        <table className="table">
+        <table className="table" role="table" aria-label="Lead scoring table">
           <thead>
             <tr>
               <th>Lead</th>
@@ -231,8 +231,8 @@ const AIInsights = () => {
                   </td>
                   <td className="helper">{s.recent} ago</td>
                   <td style={{ display: 'flex', gap: 8 }}>
-                    <button className="button">Open</button>
-                    <button className="button secondary">Schedule</button>
+                    <button className="button" title="Open contact">Open</button>
+                    <button className="button secondary" title="Schedule activity">Schedule</button>
                   </td>
                 </tr>
               );

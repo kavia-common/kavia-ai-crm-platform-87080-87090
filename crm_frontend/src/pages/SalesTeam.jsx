@@ -183,7 +183,7 @@ const SalesTeam = () => {
               {/* Deals */}
               <div>
                 <div className="helper" style={{ marginBottom: 6 }}>Deals</div>
-                <table className="table">
+                <table className="table" role="table" aria-label={`Deals table for ${member.owner}`}>
                   <thead>
                     <tr>
                       <th>Deal</th>

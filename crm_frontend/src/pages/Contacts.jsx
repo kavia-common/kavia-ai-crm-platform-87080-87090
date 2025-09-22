@@ -74,7 +74,7 @@ const Contacts = () => {
       >
         <Tabs items={items} activeKey={tab} onChange={setTab} />
         <div style={{ marginTop: 12 }}>
-          <table className="table">
+          <table className="table" role="table" aria-label="Contacts table">
             <thead>
               <tr>
                 <th>Name</th><th>Email</th><th>Company</th><th>Owner</th><th>Status</th><th></th>
@@ -91,8 +91,8 @@ const Contacts = () => {
                     <td>{c.owner || '-'}</td>
                     <td><span className="badge success">{c.status || '-'}</span></td>
                     <td style={{ display: 'flex', gap: 8 }}>
-                      <button className="button">View</button>
-                      <button className="button" onClick={() => onDelete(c.id || c._id)}>Delete</button>
+                      <button className="button" title="Open contact details">View</button>
+                      <button className="button" title="Delete contact" onClick={() => onDelete(c.id || c._id)}>Delete</button>
                     </td>
                   </tr>
                 );

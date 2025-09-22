@@ -46,7 +46,7 @@ const Deals = () => {
   return (
     <div className="grid" style={{ gap: 16 }}>
       <Card title="Deals" right={<button className="button primary" onClick={() => setOpen(true)}>+ New Deal</button>}>
-        <table className="table">
+        <table className="table" role="table" aria-label="Deals table">
           <thead>
             <tr>
               <th>Deal</th><th>Stage</th><th>Amount</th><th>Close Date</th><th></th>
@@ -60,8 +60,8 @@ const Deals = () => {
                 <td>{formatCurrency(d.amount)}</td>
                 <td>{d.closeDate || '-'}</td>
                 <td style={{ display: 'flex', gap: 8 }}>
-                  <button className="button">Open</button>
-                  <button className="button" onClick={() => onDelete(d.id || d._id)}>Delete</button>
+                  <button className="button" title="Open deal">Open</button>
+                  <button className="button" title="Delete deal" onClick={() => onDelete(d.id || d._id)}>Delete</button>
                 </td>
               </tr>
             ))}

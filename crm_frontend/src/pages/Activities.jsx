@@ -67,7 +67,7 @@ const Activities = () => {
       </Card>
 
       <Card title="Recent Activities">
-        <table className="table">
+        <table className="table" role="table" aria-label="Activities table">
           <thead>
             <tr>
               <th>When</th><th>Type</th><th>Subject</th><th>Owner</th>

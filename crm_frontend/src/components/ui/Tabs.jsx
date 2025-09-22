@@ -6,17 +6,22 @@ import React from 'react';
  */
 const Tabs = ({ items = [], activeKey, onChange }) => {
   return (
-    <div className="tabs">
-      {items.map((t) => (
-        <div
-          key={t.key}
-          className={`tab${t.key === activeKey ? ' active' : ''}`}
-          role="button"
-          onClick={() => onChange?.(t.key)}
-        >
-          {t.label}
-        </div>
-      ))}
+    <div className="tabs" role="tablist" aria-label="Tabs">
+      {items.map((t) => {
+        const active = t.key === activeKey;
+        return (
+          <div
+            key={t.key}
+            className={`tab${active ? ' active' : ''}`}
+            role="tab"
+            aria-selected={active}
+            tabIndex={active ? 0 : -1}
+            onClick={() => onChange?.(t.key)}
+          >
+            {t.label}
+          </div>
+        );
+      })}
     </div>
   );
 };
