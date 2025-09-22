@@ -19,8 +19,28 @@ function normalizePayload(payload) {
 
 const fetcher = async (path) => {
   // Use apiClient.get to ensure credentials and error handling are consistent
-  const raw = await get(path);
-  return normalizePayload(raw);
+  try {
+    const raw = await get(path);
+    const norm = normalizePayload(raw);
+    // Lightweight debug – only logs when a special flag is present in URL
+    if (typeof window !== 'undefined') {
+      const dbg = new URLSearchParams(window.location.search).get('debugPipeline') === '1';
+      if (dbg && path === '/deals') {
+        // eslint-disable-next-line no-console
+        console.log('[useAPI] GET', path, 'payload sample:', Array.isArray(norm) ? norm.slice(0, 3) : norm);
+      }
+    }
+    return norm;
+  } catch (e) {
+    if (typeof window !== 'undefined') {
+      const dbg = new URLSearchParams(window.location.search).get('debugPipeline') === '1';
+      if (dbg && path === '/deals') {
+        // eslint-disable-next-line no-console
+        console.error('[useAPI] GET /deals failed:', { message: e?.message, status: e?.status, payload: e?.payload });
+      }
+    }
+    throw e;
+  }
 };
 
 // PUBLIC_INTERFACE
