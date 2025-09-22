@@ -19,9 +19,15 @@ const STAGES = [
 
 const Deals = () => {
   const [open, setOpen] = useState(false);
+  // Expanded mock to reflect multiple stages and include provided companies
   const mock = [
-    { id: 1, name: 'Acme Inc. - Expansion', stage: 'poc proposal', amount: 54000, closeDate: '2025-11-01' },
-    { id: 2, name: 'Globex - Migration', stage: 'discovery call', amount: 120000, closeDate: '2025-10-12' },
+    { id: 501, name: 'Tata Elxsi - POC Proposal', stage: 'poc proposal', amount: 88000, closeDate: '2025-11-01' },
+    { id: 301, name: 'GCS Tech - Discovery', stage: 'discovery call', amount: 54000, closeDate: '2025-10-12' },
+    { id: 201, name: 'ioet - Initial Fit', stage: 'qualification', amount: 32000, closeDate: '2025-10-05' },
+    { id: 602, name: 'DigitalT3 - Pilot Implementation', stage: 'poc execution', amount: 67000, closeDate: '2025-11-15' },
+    { id: 701, name: 'MetaZ digital - Evaluation', stage: 'evaluation and feedback', amount: 74000, closeDate: '2025-11-20' },
+    { id: 901, name: 'Acme Inc. - Q3 Expansion', stage: 'closed won', amount: 54000, closeDate: '2025-09-10' },
+    { id: 402, name: 'Umbrella Corp - Platform Walkthrough', stage: 'demo', amount: 38000, closeDate: '2025-10-01' },
   ];
 
   return (
