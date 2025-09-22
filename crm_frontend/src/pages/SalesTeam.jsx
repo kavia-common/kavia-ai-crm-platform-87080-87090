@@ -5,10 +5,12 @@ import { formatCurrency } from '../utils/format';
 /**
  * PUBLIC_INTERFACE
  * SalesTeam page: Displays sales team members and the accounts/deals they own.
+ * Enhanced to include role, email, and contact phone for each member.
  * Data source: derives from the same mock deals used in the Pipeline page to keep mock data consistent.
  * Each team member groups:
  *  - Accounts (unique company names parsed from the deal name prefix, before the hyphen)
  *  - Deals list with stage and amount
+ *  - Contact details: role, email, phone
  */
 const SalesTeam = () => {
   // Mirror the mock deals from Pipeline to keep single source of truth for owners and companies
@@ -54,6 +56,18 @@ const SalesTeam = () => {
     { id: 1002, name: 'Northwind Traders - Budget Hold', amount: 19000, stage: 'closed lost', owner: 'Priya' },
   ];
 
+  // Mock directory of team member details: role, email, phone.
+  // Assign plausible values for existing owners.
+  const memberDirectory = {
+    Sam:   { role: 'Account Executive', email: 'sam@kavia.example.com',   phone: '+1 (415) 555-0111' },
+    Priya: { role: 'Sales Development Rep', email: 'priya@kavia.example.com', phone: '+1 (415) 555-0112' },
+    Alex:  { role: 'Sales Manager', email: 'alex@kavia.example.com',  phone: '+1 (415) 555-0113' },
+    Lee:   { role: 'Account Executive', email: 'lee@kavia.example.com',   phone: '+1 (415) 555-0114' },
+    Jamie: { role: 'SDR', email: 'jamie@kavia.example.com', phone: '+1 (415) 555-0115' },
+    Morgan:{ role: 'Account Executive', email: 'morgan@kavia.example.com', phone: '+1 (415) 555-0116' },
+    Tariq: { role: 'Sales Manager', email: 'tariq@kavia.example.com', phone: '+1 (415) 555-0117' },
+  };
+
   // Extract company/account from deal name by splitting on ' - ' and taking the first token
   const getCompanyFromDeal = (dealName) => {
     if (!dealName) return 'Unknown';
@@ -61,18 +75,22 @@ const SalesTeam = () => {
     return parts[0]?.trim() || 'Unknown';
   };
 
-  // Build team structure: { [owner]: { deals:[], accounts:Set, totals:{open, closedWon, total}} }
+  // Build team structure: { [owner]: { deals:[], accounts:Set, totals:{open, closedWon, total}, role, email, phone } }
   const team = useMemo(() => {
     const acc = {};
     for (const d of mockDeals) {
       const owner = d.owner || 'Unassigned';
       const company = getCompanyFromDeal(d.name);
       if (!acc[owner]) {
+        const info = memberDirectory[owner] || { role: 'Unassigned', email: '-', phone: '-' };
         acc[owner] = {
           owner,
           deals: [],
           accounts: new Set(),
           totals: { open: 0, closedWon: 0, total: 0 },
+          role: info.role,
+          email: info.email,
+          phone: info.phone,
         };
       }
       acc[owner].deals.push(d);
@@ -94,11 +112,12 @@ const SalesTeam = () => {
     <div className="grid" style={{ gap: 16 }}>
       <Card
         title="Sales Team"
-        subtitle="Team members and the accounts/deals they manage (from mock pipeline data)"
+        subtitle="Team members, contact details, and the accounts/deals they manage (from mock pipeline data)"
       >
         <div className="grid cols-2">
           {team.map((member) => (
             <div key={member.owner} className="card" style={{ padding: 16 }}>
+              {/* Header: name and counts */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                 <div style={{ fontWeight: 700 }}>{member.owner}</div>
                 <div className="helper">
@@ -106,6 +125,32 @@ const SalesTeam = () => {
                 </div>
               </div>
 
+              {/* Contact details row */}
+              <div
+                className="card"
+                style={{
+                  padding: 12,
+                  display: 'grid',
+                  gridTemplateColumns: '1.2fr 1.4fr 1fr',
+                  gap: 8,
+                  marginBottom: 12,
+                }}
+              >
+                <div>
+                  <div className="helper">Role</div>
+                  <div style={{ fontWeight: 600 }}>{member.role}</div>
+                </div>
+                <div>
+                  <div className="helper">Email</div>
+                  <div><a href={`mailto:${member.email}`}>{member.email}</a></div>
+                </div>
+                <div>
+                  <div className="helper">Phone</div>
+                  <div><a href={`tel:${member.phone.replace(/[^+\d]/g, '')}`}>{member.phone}</a></div>
+                </div>
+              </div>
+
+              {/* Totals */}
               <div style={{ display: 'flex', gap: 10, marginBottom: 12 }}>
                 <div className="card" style={{ padding: 12, flex: 1 }}>
                   <div className="helper">Open Pipeline</div>
@@ -121,6 +166,7 @@ const SalesTeam = () => {
                 </div>
               </div>
 
+              {/* Accounts */}
               <div style={{ marginBottom: 12 }}>
                 <div className="helper" style={{ marginBottom: 6 }}>Accounts</div>
                 {member.accounts.length ? (
@@ -134,6 +180,7 @@ const SalesTeam = () => {
                 )}
               </div>
 
+              {/* Deals */}
               <div>
                 <div className="helper" style={{ marginBottom: 6 }}>Deals</div>
                 <table className="table">
