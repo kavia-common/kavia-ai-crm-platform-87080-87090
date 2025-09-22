@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Card from '../components/ui/Card';
 import Modal from '../components/ui/Modal';
 import { formatCurrency } from '../utils/format';
-import { useAPI } from '../hooks/useAPI';
-import { DealsService } from '../services/deals';
 
 // Keep a single source of truth for stages matching Pipeline
 const STAGES = [
@@ -21,97 +19,56 @@ const STAGES = [
 
 const Deals = () => {
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: '', stage: STAGES[0], amount: '', closeDate: '' });
-  const [submitting, setSubmitting] = useState(false);
-  const [actionError, setActionError] = useState('');
-
-  const { data, error, isLoading, mutate } = useAPI('/deals');
-  const deals = Array.isArray(data) ? data : (data?.items || []);
-
-  const onInput = (k, v) => setForm(f => ({ ...f, [k]: v }));
-
-  const onCreate = async () => {
-    setSubmitting(true);
-    setActionError('');
-    try {
-      await DealsService.create({
-        name: form.name,
-        stage: form.stage,
-        amount: Number(form.amount) || 0,
-        closeDate: form.closeDate || undefined,
-      });
-      await mutate();
-      setOpen(false);
-      setForm({ name: '', stage: STAGES[0], amount: '', closeDate: '' });
-    } catch (e) {
-      setActionError(e?.payload?.message || e.message || 'Failed to create deal');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const onDelete = async (id) => {
-    if (!window.confirm('Delete this deal?')) return;
-    setActionError('');
-    try {
-      await DealsService.remove(id);
-      await mutate();
-    } catch (e) {
-      setActionError(e?.payload?.message || e.message || 'Failed to delete deal');
-    }
-  };
+  // Expanded mock to reflect multiple stages and include provided companies
+  // Updated with owners aligned to Pipeline assignments
+  const mock = [
+    { id: 501, name: 'Tata Elxsi - POC Proposal', stage: 'poc proposal', amount: 88000, closeDate: '2025-11-01', owner: 'Alex' },
+    { id: 301, name: 'GCS Tech - Discovery', stage: 'discovery call', amount: 54000, closeDate: '2025-10-12', owner: 'Jamie' },
+    { id: 201, name: 'ioet - Initial Fit', stage: 'qualification', amount: 32000, closeDate: '2025-10-05', owner: 'Alex' },
+    { id: 602, name: 'DigitalT3 - Pilot Implementation', stage: 'poc execution', amount: 67000, closeDate: '2025-11-15', owner: 'Jamie' },
+    { id: 701, name: 'MetaZ digital - Evaluation', stage: 'evaluation and feedback', amount: 74000, closeDate: '2025-11-20', owner: 'Priya' },
+    // keep a couple of other deals for variety
+    { id: 901, name: 'Acme Inc. - Q3 Expansion', stage: 'closed won', amount: 54000, closeDate: '2025-09-10', owner: 'Morgan' },
+    { id: 402, name: 'Umbrella Corp - Platform Walkthrough', stage: 'demo', amount: 38000, closeDate: '2025-10-01', owner: 'Tariq' },
+  ];
 
   return (
-    <div className="grid" style={{ gap: 16 }}>
+    <div className="grid" style={{gap:16}}>
       <Card title="Deals" right={<button className="button primary" onClick={() => setOpen(true)}>+ New Deal</button>}>
-        {isLoading && <div className="helper">Loading deals…</div>}
-        {error && <div style={{ color: 'var(--color-error)' }}>Error loading deals: {String(error.message || error)}</div>}
-        {actionError && <div style={{ color: 'var(--color-error)', marginBottom: 8 }}>{actionError}</div>}
-        {!isLoading && !error && (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Deal</th><th>Stage</th><th>Amount</th><th>Close Date</th><th></th>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Deal</th><th>Stage</th><th>Amount</th><th>Close Date</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {mock.map(d => (
+              <tr key={d.id}>
+                <td>{d.name}</td>
+                <td><span className="badge success" style={{ textTransform: 'capitalize' }}>{d.stage}</span></td>
+                <td>{formatCurrency(d.amount)}</td>
+                <td>{d.closeDate}</td>
+                <td><button className="button">Open</button></td>
               </tr>
-            </thead>
-            <tbody>
-              {deals.map(d => (
-                <tr key={d.id || d._id}>
-                  <td>{d.name || '-'}</td>
-                  <td><span className="badge success" style={{ textTransform: 'capitalize' }}>{d.stage || '-'}</span></td>
-                  <td>{formatCurrency(d.amount)}</td>
-                  <td>{d.closeDate || '-'}</td>
-                  <td style={{ display: 'flex', gap: 8 }}>
-                    <button className="button">Open</button>
-                    <button className="button" onClick={() => onDelete(d.id || d._id)}>Delete</button>
-                  </td>
-                </tr>
-              ))}
-              {deals.length === 0 && (
-                <tr><td colSpan={5} className="helper">No deals found.</td></tr>
-              )}
-            </tbody>
-          </table>
-        )}
+            ))}
+          </tbody>
+        </table>
       </Card>
 
       <Modal open={open} title="Create Deal" onClose={() => setOpen(false)} footer={
         <>
-          <button className="button" onClick={() => setOpen(false)} disabled={submitting}>Cancel</button>
-          <button className="button primary" onClick={onCreate} disabled={submitting}>
-            {submitting ? 'Creating…' : 'Create'}
-          </button>
+          <button className="button" onClick={() => setOpen(false)}>Cancel</button>
+          <button className="button primary" onClick={() => setOpen(false)}>Create</button>
         </>
       }>
-        {actionError && <div style={{ color: 'var(--color-error)', marginBottom: 8 }}>{actionError}</div>}
         <div className="grid cols-2">
           <div>
             <div className="helper">Name</div>
-            <input className="input" placeholder="Company - Project" value={form.name} onChange={(e) => onInput('name', e.target.value)} />
+            <input className="input" placeholder="Company - Project" />
           </div>
           <div>
             <div className="helper">Stage</div>
-            <select className="select" value={form.stage} onChange={(e) => onInput('stage', e.target.value)}>
+            <select className="select" defaultValue={STAGES[0]}>
               {STAGES.map(s => (
                 <option key={s} value={s}>{s}</option>
               ))}
@@ -119,11 +76,11 @@ const Deals = () => {
           </div>
           <div>
             <div className="helper">Amount (USD)</div>
-            <input className="input" type="number" placeholder="50000" value={form.amount} onChange={(e) => onInput('amount', e.target.value)} />
+            <input className="input" type="number" placeholder="50000" />
           </div>
           <div>
             <div className="helper">Close Date</div>
-            <input className="input" type="date" value={form.closeDate} onChange={(e) => onInput('closeDate', e.target.value)} />
+            <input className="input" type="date" />
           </div>
         </div>
       </Modal>
