@@ -283,8 +283,19 @@ a { color: inherit; text-decoration: none; }
 
 .pipeline {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* Show more columns to fit the full pipeline on wide screens */
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
+}
+@media (min-width: 1600px) {
+  .pipeline {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+@media (min-width: 1920px) {
+  .pipeline {
+    grid-template-columns: repeat(8, 1fr);
+  }
 }
 
 .pipeline-col {

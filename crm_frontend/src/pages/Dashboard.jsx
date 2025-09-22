@@ -11,9 +11,9 @@ const mock = {
     { label: 'Avg. Cycle', value: '34 days', trend: '−0.8d' },
   ],
   recent: [
-    { id: 1, name: 'Acme Inc. - Q3 Expansion', amount: 54000, stage: 'Proposal' },
-    { id: 2, name: 'Globex - Migration', amount: 120000, stage: 'Discovery' },
-    { id: 3, name: 'Initech - Renewal', amount: 36000, stage: 'Negotiation' },
+    { id: 1, name: 'Acme Inc. - Q3 Expansion', amount: 54000, stage: 'poc proposal' },
+    { id: 2, name: 'Globex - Migration', amount: 120000, stage: 'discovery call' },
+    { id: 3, name: 'Initech - Renewal', amount: 36000, stage: 'negotiation and contracting' },
   ],
   ai: {
     forecast: '$310k this quarter (±$40k)',
@@ -50,7 +50,7 @@ const Dashboard = () => {
               {mock.recent.map((d) => (
                 <tr key={d.id}>
                   <td>{d.name}</td>
-                  <td><span className="badge success">{d.stage}</span></td>
+                  <td><span className="badge success" style={{ textTransform: 'capitalize' }}>{d.stage}</span></td>
                   <td>{formatCurrency(d.amount)}</td>
                 </tr>
               ))}

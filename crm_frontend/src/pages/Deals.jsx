@@ -3,11 +3,25 @@ import Card from '../components/ui/Card';
 import Modal from '../components/ui/Modal';
 import { formatCurrency } from '../utils/format';
 
+// Keep a single source of truth for stages matching Pipeline
+const STAGES = [
+  'prospecting',
+  'qualification',
+  'discovery call',
+  'demo',
+  'poc proposal',
+  'poc execution',
+  'evaluation and feedback',
+  'negotiation and contracting',
+  'closed won',
+  'closed lost',
+];
+
 const Deals = () => {
   const [open, setOpen] = useState(false);
   const mock = [
-    { id: 1, name: 'Acme Inc. - Expansion', stage: 'Proposal', amount: 54000, closeDate: '2025-11-01' },
-    { id: 2, name: 'Globex - Migration', stage: 'Discovery', amount: 120000, closeDate: '2025-10-12' },
+    { id: 1, name: 'Acme Inc. - Expansion', stage: 'poc proposal', amount: 54000, closeDate: '2025-11-01' },
+    { id: 2, name: 'Globex - Migration', stage: 'discovery call', amount: 120000, closeDate: '2025-10-12' },
   ];
 
   return (
@@ -23,7 +37,7 @@ const Deals = () => {
             {mock.map(d => (
               <tr key={d.id}>
                 <td>{d.name}</td>
-                <td><span className="badge success">{d.stage}</span></td>
+                <td><span className="badge success" style={{ textTransform: 'capitalize' }}>{d.stage}</span></td>
                 <td>{formatCurrency(d.amount)}</td>
                 <td>{d.closeDate}</td>
                 <td><button className="button">Open</button></td>
@@ -46,11 +60,10 @@ const Deals = () => {
           </div>
           <div>
             <div className="helper">Stage</div>
-            <select className="select">
-              <option>Prospecting</option>
-              <option>Discovery</option>
-              <option>Proposal</option>
-              <option>Negotiation</option>
+            <select className="select" defaultValue={STAGES[0]}>
+              {STAGES.map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
             </select>
           </div>
           <div>
