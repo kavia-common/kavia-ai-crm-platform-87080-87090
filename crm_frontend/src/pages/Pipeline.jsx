@@ -39,9 +39,12 @@ function normalizeStageName(value) {
 }
 
 /**
- * Pipeline now fetches deals from backend /deals but keeps same UI structure.
- * Assumes each deal has fields: id (or _id), name, amount, stage, owner.
- * Tolerates backend response shapes: array or { items/results/data }.
+ * PUBLIC_INTERFACE
+ * Pipeline view that groups deals by stage and allows moving a deal to another stage.
+ * It fetches deals from /deals via useAPI and tolerates response shapes:
+ * - array
+ * - or object wrapper with items/results/data arrays.
+ * Assumes deal has: id (or _id), name, amount, stage, owner.
  */
 const Pipeline = () => {
   const { data, error, isLoading, mutate } = useAPI('/deals');
