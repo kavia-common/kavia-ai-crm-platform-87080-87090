@@ -1,48 +1,94 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Card from '../components/ui/Card';
+import Modal from '../components/ui/Modal';
+import { MOCK_ACCOUNTS } from '../services/mockData';
 
+/**
+ * Demo mode: Uses local mock accounts, no backend calls.
+ */
 const Accounts = () => {
-  // Updated accounts aligned with pipeline companies and current team members
-  const mock = [
-    { id: 501, name: 'Tata Elxsi', domain: 'tataelxsi.com', owner: 'Alex' },
-    { id: 902, name: 'ioet', domain: 'ioet.com', owner: 'Jamie' },
-    { id: 301, name: 'GCS Tech', domain: 'gcstech.com', owner: 'Priya' },
-    { id: 602, name: 'DigitalT3', domain: 'digitalt3.com', owner: 'Jamie' },
-    { id: 701, name: 'MetaZ digital', domain: 'metaz.digital', owner: 'Priya' },
-  ];
+  const [accounts, setAccounts] = useState(MOCK_ACCOUNTS);
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ name: '', domain: '', owner: '' });
+  const [submitting, setSubmitting] = useState(false);
+
+  const onInput = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const onCreate = () => {
+    setSubmitting(true);
+    // simple local append with generated id
+    const id = `a${Math.random().toString(36).slice(2, 8)}`;
+    setAccounts(prev => [{ id, name: form.name, domain: form.domain || '', owner: form.owner || '' }, ...prev]);
+    setOpen(false);
+    setForm({ name: '', domain: '', owner: '' });
+    setSubmitting(false);
+  };
+
+  const onDelete = (id) => {
+    if (!window.confirm('Delete this account?')) return;
+    setAccounts(prev => prev.filter(a => (a.id || a._id) !== id));
+  };
 
   return (
-    <Card title="Accounts">
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Name</th><th>Domain</th><th>Owner</th><th>Open Deals</th><th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {mock.map(a => {
-            // lightweight static open deal counts by account name based on current pipeline mock
-            const openDealsByAccount = {
-              'Tata Elxsi': 1,
-              'ioet': 0, // has a closed won deal in pipeline example; qualification item here counts as open in Deals page list
-              'GCS Tech': 2,
-              'DigitalT3': 1,
-              'MetaZ digital': 1,
-            };
-            const openCount = openDealsByAccount[a.name] ?? 0;
-            return (
-              <tr key={a.id}>
-                <td>{a.name}</td>
-                <td>{a.domain}</td>
-                <td>{a.owner}</td>
-                <td>{openCount}</td>
-                <td><button className="button">Open</button></td>
+    <div className="grid" style={{ gap: 16 }}>
+      <Card
+        title="Accounts"
+        right={<button className="button primary" onClick={() => setOpen(true)}>+ New Account</button>}
+      >
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name</th><th>Domain</th><th>Owner</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {accounts.map(a => (
+              <tr key={a.id || a._id}>
+                <td>{a.name || '-'}</td>
+                <td>{a.domain || '-'}</td>
+                <td>{a.owner || '-'}</td>
+                <td style={{ display: 'flex', gap: 8 }}>
+                  <button className="button">Open</button>
+                  <button className="button" onClick={() => onDelete(a.id || a._id)}>Delete</button>
+                </td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </Card>
+            ))}
+            {accounts.length === 0 && (
+              <tr><td colSpan={4} className="helper">No accounts found.</td></tr>
+            )}
+          </tbody>
+        </table>
+      </Card>
+
+      <Modal
+        open={open}
+        title="New Account"
+        onClose={() => setOpen(false)}
+        footer={
+          <>
+            <button className="button" onClick={() => setOpen(false)} disabled={submitting}>Cancel</button>
+            <button className="button primary" onClick={onCreate} disabled={submitting}>
+              {submitting ? 'Saving…' : 'Save'}
+            </button>
+          </>
+        }
+      >
+        <div className="grid cols-2">
+          <div style={{ gridColumn: '1/-1' }}>
+            <div className="helper">Name</div>
+            <input className="input" placeholder="Acme Inc." value={form.name} onChange={(e) => onInput('name', e.target.value)} />
+          </div>
+          <div>
+            <div className="helper">Domain</div>
+            <input className="input" placeholder="acme.com" value={form.domain} onChange={(e) => onInput('domain', e.target.value)} />
+          </div>
+          <div>
+            <div className="helper">Owner</div>
+            <input className="input" placeholder="Owner name" value={form.owner} onChange={(e) => onInput('owner', e.target.value)} />
+          </div>
+        </div>
+      </Modal>
+    </div>
   );
 };
 
